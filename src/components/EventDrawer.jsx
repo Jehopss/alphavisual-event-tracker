@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ChevronDown, X } from 'lucide-react'
+import { ChevronDown, LoaderCircle, X } from 'lucide-react'
 import { CATEGORY_OPTIONS, PAYMENT_OPTIONS, STATUS_OPTIONS } from '../constants'
 import { btnGhost, btnPrimary, fieldBase, fieldError, iconBtn, selectBase } from '../styles'
 import { formatDateTimeInput, formatFeeInput, formatRupiah, parseFeeInput } from '../utils/format'
@@ -86,6 +86,7 @@ function SelectField({ id, value, onChange, options, optionLabel = 'label' }) {
 export default function EventDrawer({ event, onClose, onSave }) {
   const [form, setForm] = useState(() => createInitialForm(event))
   const [submitted, setSubmitted] = useState(false)
+  const [saving, setSaving] = useState(false)
   const isEdit = Boolean(event)
   const errors = submitted ? validate(form) : {}
 
@@ -112,8 +113,9 @@ export default function EventDrawer({ event, onClose, onSave }) {
   })
   const inputClass = (field) => `${fieldBase} ${errors[field] ? fieldError : ''}`
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    if (saving) return
     const found = validate(form)
     const firstInvalid = Object.keys(found)[0]
     if (firstInvalid) {
@@ -121,14 +123,20 @@ export default function EventDrawer({ event, onClose, onSave }) {
       document.getElementById(`f-${firstInvalid}`)?.focus()
       return
     }
-    onSave({
-      ...form,
-      title: form.title.trim(),
-      client: form.client.trim(),
-      location: form.location.trim(),
-      docLink: form.docLink.trim(),
-      notes: form.notes.trim(),
-    })
+    setSaving(true)
+    try {
+      // Kalau berhasil, drawer ditutup oleh parent. Kalau gagal, form tetap terbuka.
+      await onSave({
+        ...form,
+        title: form.title.trim(),
+        client: form.client.trim(),
+        location: form.location.trim(),
+        docLink: form.docLink.trim(),
+        notes: form.notes.trim(),
+      })
+    } catch {
+      setSaving(false)
+    }
   }
 
   return (
@@ -225,8 +233,9 @@ export default function EventDrawer({ event, onClose, onSave }) {
 
         <div className="flex items-center justify-end gap-2 px-6 py-4 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900">
           <button type="button" onClick={onClose} className={btnGhost}>Batal</button>
-          <button type="submit" form="event-form" className={btnPrimary}>
-            {isEdit ? 'Simpan perubahan' : 'Simpan event'}
+          <button type="submit" form="event-form" disabled={saving} className={btnPrimary}>
+            {saving && <LoaderCircle className="size-4 animate-spin" />}
+            {saving ? 'Menyimpan' : isEdit ? 'Simpan perubahan' : 'Simpan event'}
           </button>
         </div>
       </div>

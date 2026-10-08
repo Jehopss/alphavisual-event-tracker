@@ -11,7 +11,7 @@ function loadCustomLogo() {
 }
 
 // Vektor resmi Alpha Visual (presisi & langsung muncul tanpa perlu file)
-function VectorLogo() {
+export function VectorLogo() {
   return (
     <svg viewBox="0 0 380 95" className="h-8 sm:h-9 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>

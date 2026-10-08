@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { ChevronDown, Download, FileJson, FileSpreadsheet, Printer } from 'lucide-react'
-import { btnSecondary } from '../styles'
+import { useDismiss } from '../hooks/useDismiss'
+import { btnSecondary, menuPanel } from '../styles'
 
-function MenuItem({ icon: Icon, title, description, onClick }) {
+export function MenuItem({ icon: Icon, title, description, onClick }) {
   return (
     <button
       role="menuitem"
@@ -21,23 +22,8 @@ function MenuItem({ icon: Icon, title, description, onClick }) {
 export default function ExportMenu({ onExportCSV, onExportJSON }) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef(null)
-
-  // Tutup saat klik di luar menu atau menekan Escape
-  useEffect(() => {
-    if (!open) return
-    const onPointerDown = (e) => {
-      if (!rootRef.current?.contains(e.target)) setOpen(false)
-    }
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') setOpen(false)
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    document.addEventListener('keydown', onKeyDown)
-    return () => {
-      document.removeEventListener('pointerdown', onPointerDown)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [open])
+  const close = useCallback(() => setOpen(false), [])
+  useDismiss(rootRef, open, close)
 
   const run = (action) => () => {
     setOpen(false)
@@ -50,17 +36,17 @@ export default function ExportMenu({ onExportCSV, onExportJSON }) {
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className={`${btnSecondary} px-3`}
+        className={`${btnSecondary} max-sm:w-10 max-sm:px-0 sm:px-3!`}
       >
         <Download className="size-4" />
         <span className="hidden sm:inline">Ekspor</span>
-        <ChevronDown className={`size-3.5 text-zinc-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`hidden sm:block size-3.5 text-zinc-400 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-full mt-2 z-50 w-72 origin-top-right animate-pop-in rounded-2xl bg-white dark:bg-zinc-900 p-1.5 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-xl shadow-zinc-900/10 dark:shadow-black/40"
+          className={`${menuPanel} w-72`}
         >
           <MenuItem icon={FileSpreadsheet} title="Unduh CSV" description="Untuk Excel atau Google Sheets" onClick={run(onExportCSV)} />
           <MenuItem icon={FileJson} title="Unduh backup JSON" description="Salinan lengkap semua data event" onClick={run(onExportJSON)} />

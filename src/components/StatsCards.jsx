@@ -126,8 +126,29 @@ function PaymentTile({ counts, total }) {
   )
 }
 
-export default function StatsCards({ events }) {
+function TileSkeleton({ className = '' }) {
+  return (
+    <div className={`${panel} p-5 animate-pulse ${className}`} aria-hidden="true">
+      <div className="h-3 w-24 rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="mt-8 h-8 w-2/5 rounded bg-zinc-100 dark:bg-zinc-800" />
+      <div className="mt-3 h-3 w-1/3 rounded bg-zinc-100 dark:bg-zinc-800" />
+    </div>
+  )
+}
+
+export default function StatsCards({ events, loading }) {
   const stats = useMemo(() => computeStats(events), [events])
+
+  if (loading) {
+    return (
+      <section aria-label="Ringkasan" aria-busy="true" className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <TileSkeleton className="col-span-2 lg:row-span-2 min-h-56" />
+        <TileSkeleton />
+        <TileSkeleton />
+        <TileSkeleton className="col-span-2" />
+      </section>
+    )
+  }
 
   return (
     <section aria-label="Ringkasan" className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

@@ -1,6 +1,6 @@
 import { CalendarPlus, SearchX } from 'lucide-react'
 import EventCard from './EventCard'
-import { btnPrimary, btnSecondary } from '../styles'
+import { btnPrimary, btnSecondary, panel } from '../styles'
 
 export function EmptyState({ isFiltered, onAddEvent, onResetFilters }) {
   return (
@@ -22,6 +22,38 @@ export function EmptyState({ isFiltered, onAddEvent, onResetFilters }) {
         )}
         <button onClick={onAddEvent} className={btnPrimary}>Tambah event</button>
       </div>
+    </div>
+  )
+}
+
+// Kerangka kartu selama data dimuat, bentuknya mengikuti EventCard
+function CardSkeleton() {
+  return (
+    <div className={`${panel} p-5 animate-pulse`} aria-hidden="true">
+      <div className="flex gap-4">
+        <div className="w-14 h-[68px] rounded-xl bg-zinc-100 dark:bg-zinc-800" />
+        <div className="flex-1 space-y-2.5 pt-1">
+          <div className="h-3 w-1/3 rounded bg-zinc-100 dark:bg-zinc-800" />
+          <div className="h-4 w-4/5 rounded bg-zinc-100 dark:bg-zinc-800" />
+          <div className="h-3 w-1/2 rounded bg-zinc-100 dark:bg-zinc-800" />
+        </div>
+      </div>
+      <div className="mt-5 space-y-2">
+        <div className="h-3 w-2/5 rounded bg-zinc-100 dark:bg-zinc-800" />
+        <div className="h-3 w-3/5 rounded bg-zinc-100 dark:bg-zinc-800" />
+      </div>
+      <div className="mt-6 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-between">
+        <div className="h-8 w-24 rounded bg-zinc-100 dark:bg-zinc-800" />
+        <div className="h-7 w-28 rounded-full bg-zinc-100 dark:bg-zinc-800" />
+      </div>
+    </div>
+  )
+}
+
+export function ListSkeleton() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" aria-busy="true" aria-label="Memuat event">
+      {Array.from({ length: 6 }, (_, i) => <CardSkeleton key={i} />)}
     </div>
   )
 }

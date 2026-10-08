@@ -1,16 +1,39 @@
-# React + Vite
+# Alpha Visual Event Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Pencatat jadwal, pipeline, dan status pembayaran event untuk tim Alpha Visual. Data disimpan bersama di Supabase, dan setiap anggota bisa menyinkronkan event ke Google Calendar pribadinya.
 
-Currently, two official plugins are available:
+**Stack:** React 19 + Vite + Tailwind CSS v4 · Supabase (Postgres, Auth, Realtime, Edge Functions) · Google Calendar API
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Mulai
 
-## React Compiler
+```bash
+npm install
+cp .env.example .env.local   # isi URL & publishable key Supabase
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Setup lengkap Supabase + Google Cloud: [docs/setup-supabase-google-calendar.md](docs/setup-supabase-google-calendar.md)
 
-## Expanding the ESLint configuration
+## Script
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Perintah | Fungsi |
+|---|---|
+| `npm run dev` | Jalankan app di `http://localhost:5173` |
+| `npm run build` | Build production ke `dist/` |
+| `npm run lint` | Cek kode dengan ESLint |
+| `npm run db:push` | Terapkan migration di `supabase/migrations` ke project Supabase |
+| `npm run secrets:set` | Kirim `supabase/functions/.env` sebagai secret Edge Functions |
+| `npm run functions:deploy` | Deploy Edge Functions (`calendar-sync`, `google-connect`) |
+
+## Struktur
+
+```
+src/
+  components/   UI (Dashboard, kartu event, drawer form, menu akun, dll.)
+  hooks/        useAuth, useEvents (data + realtime), useGoogleCalendar, dll.
+  lib/          client Supabase, akses data event, impor data versi lama
+  utils/        format Rupiah/tanggal, filter, ekspor CSV/JSON
+supabase/
+  migrations/   skema database + Row Level Security
+  functions/    Edge Functions untuk sinkronisasi Google Calendar
+```

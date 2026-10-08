@@ -58,14 +58,14 @@ function KanbanCard({ event, index, onEdit, onDelete, onStatusChange, onPaymentC
         </div>
 
         <div className="flex items-center">
-          <button onClick={() => onEdit(event)} title="Edit event" aria-label="Edit event" className={`${iconBtn} size-7`}>
+          <button onClick={() => onEdit(event)} title="Edit event" aria-label="Edit event" className={`${iconBtn} size-7!`}>
             <PenLine className="size-3.5" />
           </button>
           <button
             onClick={() => onDelete(event)}
             title="Hapus event"
             aria-label="Hapus event"
-            className={`${iconBtn} size-7 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10`}
+            className={`${iconBtn} size-7! hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10`}
           >
             <Trash2 className="size-3.5" />
           </button>

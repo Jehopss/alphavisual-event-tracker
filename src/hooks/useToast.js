@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export function useToast(duration = 3000) {
-  const [toast, setToast] = useState({ message: '', visible: false })
+export function useToast(duration = 3500) {
+  const [toast, setToast] = useState({ message: '', tone: 'success', visible: false })
   const timerRef = useRef(null)
 
-  const showToast = useCallback((message) => {
-    setToast({ message, visible: true })
+  // tone: 'success' | 'error'
+  const showToast = useCallback((message, tone = 'success') => {
+    setToast({ message, tone, visible: true })
     clearTimeout(timerRef.current)
     timerRef.current = setTimeout(() => {
       setToast((t) => ({ ...t, visible: false }))
-    }, duration)
+    }, tone === 'error' ? duration + 2000 : duration)
   }, [duration])
 
   useEffect(() => () => clearTimeout(timerRef.current), [])

@@ -17,3 +17,5 @@ export const fieldError = 'ring-red-500 dark:ring-red-500 hover:ring-red-500 dar
 export const selectBase = `${fieldBase} appearance-none pr-9 cursor-pointer`
 
 export const panel = 'rounded-2xl bg-white dark:bg-zinc-900 ring-1 ring-zinc-200/80 dark:ring-zinc-800/80'
+
+export const menuPanel = 'absolute right-0 top-full mt-2 z-50 origin-top-right animate-pop-in rounded-2xl bg-white dark:bg-zinc-900 p-1.5 ring-1 ring-zinc-200 dark:ring-zinc-800 shadow-xl shadow-zinc-900/10 dark:shadow-black/40'
