@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpha Visual Event Tracker</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta name="description" content="Pencatat jadwal, pipeline, dan status pembayaran event Alpha Visual.">
+  <meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)">
+
+  <!-- Pasang class 'dark' sebelum React render agar tidak berkedip -->
+  <script>
+    try {
+      const saved = localStorage.getItem('eventledger_theme');
+      const isDark = saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', isDark);
+    } catch (e) {}
+  </script>
+</head>
+<body class="grain bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 min-h-dvh font-sans">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
